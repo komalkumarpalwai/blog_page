@@ -26,10 +26,11 @@ app.use(session({
 
 // MongoDB Connection
 const dbUrl = process.env.DB_URL;
-mongoose.connect(dbUrl, { })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
+mongoose.connect(dbUrl, {
+   
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 // Multer 
 const upload = multer({ dest: 'uploads/' })
 
