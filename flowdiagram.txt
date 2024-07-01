@@ -1,0 +1,75 @@
+                    +----------------------+
+                    |    Home Page         |
+                    +----------------------+
+                                |
+                                |
+                                v
+                    +----------------------+
+                    |    Registration      |
+                    |    Login             |
+                    +----------------------+
+                    |          |           |
+                    |          |           |
+                    v          v           v
++------------------+   +-----------------+ +------------------+
+| Registration Form|   | Login Form      | | View Blog Posts  |
++------------------+   +-----------------+ +------------------+
+                                |                   |
+                                |                   v
+                                v          +------------------+
+                    +--------------------+ | Post Details     |
+                    |   User Dashboard   | +------------------+
+                    +--------------------+
+                                |
+                                |
+        +----------------+------+--------------------+
+        |                |                           |
+        v                v                           v
++---------------+ +--------------+          +----------------------+
+| Create Post   | | Edit Profile |          | View User's Posts    |
++---------------+ +--------------+          +----------------------+
+                                |                           |
+                                v                           |
+                    +-----------------------+               |
+                    | View Other Posts      |               |
+                    +-----------------------+               |
+                                |                           |
+                                v                           v
+                    +------------------------+   +------------------------+
+                    | View Specific Post     |   | View Specific Post     |
+                    +------------------------+   +------------------------+
+                                |                           |
+                                v                           v
+                    +-------------------------+  +-------------------------+
+                    | Like / Comment on Post  |  | Like / Comment on Post  |
+                    +-------------------------+  +-------------------------+
+
+
+Explanation:
+Home Page:
+
+Entry point to the blog application with links to Registration and Login pages.
+Registration/Login:
+
+Registration Form: New users can sign up by providing necessary details.
+Login Form: Registered users can log in using their credentials.
+User Dashboard:
+
+Create Post: Logged-in users can create new blog posts.
+Edit Profile: Users can edit their profile information.
+View User's Posts: Users can view a list of their own posts.
+View Blog Posts:
+
+View Other Posts: Users can view posts created by others.
+Post Details: Users can view detailed information about a specific post.
+Like/Comment on Post: Users can like and comment on the posts they view.
+Post Interaction:
+
+Users can view specific posts and interact with them by liking or commenting.
+This flow ensures that users can register, log in, create posts, view posts from others, and interact with those posts through likes and comments.
+
+
+
+
+
+

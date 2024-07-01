@@ -1,0 +1,215 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+   
+</head>
+<style>
+    body,
+    html {
+        height: 100%;
+        margin: 0;
+        overflow-x:hidden;
+    }
+    .post-container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .post {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            padding: 12px;
+        }
+</style>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="YOUR-INTEGRITY-VALUE" crossorigin="anonymous">
+
+</head>
+<div class="w-screen h-auto flex justify-center">
+    <div class="fixed top-0 left-0 w-1/4 h-full bg-white shadow-lg p-6 flex flex-col items-center">
+        <div class="flex flex-col items-center mb-4">
+            <img src="<%= user.img %>" alt="Profile Photo" class="w-64 h-64 rounded-full shadow-md">
+            <h2 class="mt-4 text-xl font-semibold text-gray-800">
+                <%= user.name %>
+            </h2>
+
+            <p class="mt-2 text-gray-600 text-center"><i class="fas fa-info-circle mr-2"></i><strong>Bio:</strong>
+                <%= user.bio %>
+            </p>
+        </div>
+        <a href="/feed/logout" class="mt-auto text-blue-500 hover:text-blue-700 flex items-center">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-1/4 w-1/2 bg-gray-200 p-4 overflow-y-auto">
+        <div class="post-container mt-4">
+            <!-- Make a Post Section -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+                <h2 class="text-lg font-semibold mb-2">Make a Post</h2>
+                <form id="postForm" class="mb-4">
+                    <input type="file" id="postImage" accept="image/*" class="w-full border-gray-300 rounded-md p-2 focus:outline-none mb-2">
+                    <textarea id="postCaption" class="w-full border-gray-300 rounded-md p-2 focus:outline-none" placeholder="Write a caption..." rows="3"></textarea>
+                    <button type="submit" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 focus:outline-none">
+                        <i class="fas fa-paper-plane mr-2"></i> Post
+                    </button>
+                </form>
+            </div>
+
+            <!-- Display Posts Section -->
+            <div id="posts" class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-lg font-semibold mb-4">Posts</h2>
+                <!-- Posts will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="fixed top-0 right-0 w-1/4 h-full bg-white shadow-lg p-6 overflow-y-auto">
+        <div class="flex flex-col items-center">
+            <h2 class="text-xl font-semibold text-gray-800">Welcome <%= user.name %>
+            </h2>
+            <div class="bg-gray-100 p-4 mt-4 rounded-lg w-full">
+                <h3 class="text-lg font-semibold mb-2">What's Happening</h3>
+                <div id="whatsHappeningContent" class="mt-2">
+                    <!-- Dynamic content will be added here -->
+                </div>
+                <div class="flex mt-4">
+                    <input type="text" id="whatsHappeningInput"
+                        class="w-full border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
+                        maxlength="50" placeholder="Write something...">
+                    <button id="submitBtn" type="button"
+                        class="ml-2 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 focus:outline-none">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+      function initializeContent() {
+    const storedItems = JSON.parse(localStorage.getItem('whatsHappeningItems')) || [];
+
+    // Iterate through stored items and create list elements
+    storedItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        li.className = 'bg-gray-200 p-2 rounded-md mb-2';
+        document.getElementById('whatsHappeningContent').appendChild(li);
+    });
+}
+
+// Event listener for the submit button
+document.getElementById('submitBtn').addEventListener('click', function() {
+    const inputText = document.getElementById('whatsHappeningInput').value.trim();
+    if (inputText.length > 0) {
+        const li = document.createElement('li');
+        li.textContent = inputText;
+        li.className = 'bg-gray-200 p-2 rounded-md mb-2';
+        document.getElementById('whatsHappeningContent').appendChild(li);
+        document.getElementById('whatsHappeningInput').value = '';
+
+        // Store in local storage
+        let storedItems = JSON.parse(localStorage.getItem('whatsHappeningItems')) || [];
+        storedItems.push(inputText);
+        localStorage.setItem('whatsHappeningItems', JSON.stringify(storedItems));
+    }
+});
+
+// Initialize content on page load
+initializeContent();
+    // Function to handle post submission
+    document.getElementById('postForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const imageFile = document.getElementById('postImage').files[0];
+        const caption = document.getElementById('postCaption').value.trim();
+        
+        try {
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            formData.append('user', '<%= user.name %>');
+            formData.append('username', '<%= user.username %>');
+            formData.append('caption', caption);
+
+            const response = await fetch('/api/post', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to post');
+            }
+
+            const postData = await response.json();
+            displayPost(postData);
+
+            // Clear form fields after successful submission
+            document.getElementById('postImage').value = '';
+            document.getElementById('postCaption').value = '';
+
+        } catch (error) {
+            console.error('Error posting:', error);
+            alert('Failed to post. Please try again.');
+        }
+    });
+
+    // Function to handle like button click
+    async function likePost(postId) {
+        try {
+            const response = await fetch('/api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId, username: '<%= user.username %>' })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to like');
+            }
+
+            const updatedPost = await response.json();
+            // Update UI to reflect the updated post (optional)
+
+        } catch (error) {
+            console.error('Error liking post:', error);
+            alert('Failed to like. Please try again.');
+        }
+    }
+
+    // Function to display a post
+    function displayPost(post) {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post border-gray-300 border rounded-md p-4 mb-4';
+        postDiv.innerHTML = `
+            <h3 class="text-lg font-semibold">${post.user} (${post.username})</h3>
+            <img src="${post.image}" alt="Post Image" class="mt-2 w-full h-auto">
+            <p class="mt-2">${post.caption}</p>
+            <button class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 focus:outline-none" onclick="likePost('${post._id}')">
+                Like
+            </button>
+        `;
+        document.getElementById('posts').appendChild(postDiv);
+    }
+
+    // Function to load existing posts on page load
+    async function loadPosts() {
+        try {
+            const response = await fetch('/api/posts');
+            if (!response.ok) {
+                throw new Error('Failed to fetch posts');
+            }
+            const posts = await response.json();
+            posts.forEach(post => displayPost(post));
+        } catch (error) {
+            console.error('Error loading posts:', error);
+            alert('Failed to load posts. Please refresh the page.');
+        }
+    }
+
+    // Load posts when the page is loaded
+    window.onload = loadPosts;
+
+</script>

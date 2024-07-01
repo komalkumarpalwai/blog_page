@@ -1,0 +1,49 @@
+<body class="bg-gray-100">
+    <head> <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"></head>
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">User Registration</h2>
+                <% if (errorMessage) { %>
+                <p class="text-red-500 text-sm mt-2 mb-4 text-center"><%= errorMessage %></p>
+                <% } %>
+            </div>
+            <form class="mt-8 space-y-6" action="/submit" method="POST" enctype="multipart/form-data">
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div>
+                        <label for="img" class="sr-only">Profile Image</label>
+                        <input id="img" name="img" type="file" accept="image/*" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Profile Image" required>
+                    </div>
+                    <div>
+                        <label for="name" class="sr-only">Name</label>
+                        <input id="name" name="name" type="text" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Name" required>
+                    </div>
+                    <div>
+                        <label for="username" class="sr-only">Username</label>
+                        <input id="username" name="username" type="text" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Username" required>
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" name="password" type="password" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" required>
+                    </div>
+                    <div>
+                        <label for="dob" class="sr-only">Date of Birth</label>
+                        <input id="dob" name="dob" type="date" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Date of Birth" required>
+                    </div>
+                    <div>
+                        <label for="bio" class="sr-only">Bio</label>
+                        <textarea id="bio" name="bio" rows="3" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Bio" required></textarea>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Register
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-700">Already have an account? 
+                        <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+                    </h2>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
