@@ -22,7 +22,7 @@ app.use(session({
     secret: 'mySuperSecretKey123!@#',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to true only if using HTTPS
+    cookie: { secure: true } // Set to true only if using HTTPS
 }));
 
 // Connect to MongoDB
