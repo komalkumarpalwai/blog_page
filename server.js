@@ -3,12 +3,14 @@ const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+
 const multer = require('multer');
 const User = require('./models/user'); 
 const Post = require('./models/post'); 
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
+
 
 // Middleware
 app.use(bodyParser.json());
@@ -21,7 +23,7 @@ app.use(session({
     secret: 'mySuperSecretKey123!@#',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: { secure: true } 
 }));
 
 // MongoDB Connection
@@ -45,6 +47,8 @@ app.get('/api/posts', async (req, res) => {
         res.status(500).json({ error: 'Failed to load posts' });
     }
 });
+
+
 
 // Create a new post
 app.post('/api/post', upload.single('image'), async (req, res) => {
