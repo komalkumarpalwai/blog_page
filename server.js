@@ -1,16 +1,15 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
 const multer = require('multer');
+const connectDB = require('./connectDB'); // Import the connectDB function
 const User = require('./models/user'); 
 const Post = require('./models/post'); 
 require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || 3000;
-
 
 // Middleware
 app.use(bodyParser.json());
@@ -23,18 +22,14 @@ app.use(session({
     secret: 'mySuperSecretKey123!@#',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true } 
+    cookie: { secure: false } // Set to true only if using HTTPS
 }));
 
-// MongoDB Connection
-const dbUrl = process.env.DB_URL;
-mongoose.connect(dbUrl, {
-   
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
-// Multer 
-const upload = multer({ dest: 'uploads/' })
+// Connect to MongoDB
+connectDB().catch(console.dir);
+
+// Multer setup
+const upload = multer({ dest: 'uploads/' });
 
 // Routes for API
 // Get all posts
@@ -47,8 +42,6 @@ app.get('/api/posts', async (req, res) => {
         res.status(500).json({ error: 'Failed to load posts' });
     }
 });
-
-
 
 // Create a new post
 app.post('/api/post', upload.single('image'), async (req, res) => {
@@ -70,7 +63,6 @@ app.post('/api/post', upload.single('image'), async (req, res) => {
         res.status(500).json({ error: 'Failed to post' });
     }
 });
-
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
